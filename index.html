@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Calculator</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0056b3;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: calc(100% - 22px);
+        }
+
+        button[type="button"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            border: 2px solid gray;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .result div {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result p {
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .result span {
+            font-weight: bold;
+            color: #007bff;
+            display: grid;
+            align-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>EMI Calculator</h1>
+        <form id="emiForm">
+            <label for="loan">Loan Amount:</label>
+            <input type="number" class="principal">
+
+            <label for="interest">Rate of Interest (p.a)</label>
+            <input type="number" class="interest">
+
+            <label for="tenure">Loan Tenure (years)</label>
+            <input type="number" class="years">
+            <button type="button" id="calculate">Calculate</button>
+        </form>
+
+        <div class="result">
+            <div><p>Monthly EMI: </p><span class="EMI">00000</span></div>
+            <div><p>Principal Amount: </p><span class="Princi">00000</span></div>
+            <div><p>Total Interest: </p><span class="Total_int">00000</span></div>
+            <div><p>Total Amount: </p><span class="Total">00000</span></div>
+        </div>
+    </div>
+
+    <script>
+        const Calculator = () => {
+            const Principal = parseFloat(document.getElementsByClassName('principal')[0].value);
+            const ROI = parseFloat(document.getElementsByClassName("interest")[0].value);
+            const years = parseFloat(document.getElementsByClassName("years")[0].value);
+
+            if (isNaN(Principal) || isNaN(ROI) || isNaN(years)) {
+                alert("Please enter valid numbers");
+                return;
+            }
+
+            const MOI = ROI / 12 / 100;
+            const NumOfMon = years * 12;
+
+            const EMI = (Principal * MOI * Math.pow(1 + MOI, NumOfMon)) / (Math.pow(1 + MOI, NumOfMon) - 1);
+            const totalAmount = EMI * NumOfMon;
+            const totalInterest = totalAmount - Principal;
+
+            document.getElementsByClassName("EMI")[0].innerHTML = EMI.toFixed(1);
+
+            document.getElementsByClassName("Princi")[0].innerHTML = Principal.toFixed(1);
+            document.getElementsByClassName("Total_int")[0].innerHTML = totalInterest.toFixed(1);
+
+            document.getElementsByClassName("Total")[0].innerHTML = totalAmount.toFixed(1);
+        }
+
+        document.getElementById("calculate").addEventListener("click", Calculator);
+    </script>
+</body>
+</html>
